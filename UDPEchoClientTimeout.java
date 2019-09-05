@@ -54,7 +54,6 @@ public class UDPEchoClientTimeout {
             System.out.println("Received: " + new String(receivePacket.getData()));
          else
             System.out.println("No response -- giving up.");
-         System.out.println("Result: " + new String(receivePacket.getData()));
          System.out.println("Time elapsed: " + (recTime - sendTime) + "ms");
          
          socket.close();         
