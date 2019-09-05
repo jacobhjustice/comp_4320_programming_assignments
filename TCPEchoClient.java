@@ -22,7 +22,7 @@ public class TCPEchoClient {
       System.out.println("\nEnter a sentence to reverse: ");
       String sentence = input.nextLine();
       byte[] byteBuffer = sentence.getBytes();
-      long sendTime = System.currentTimeMillis();
+      long sendTime = System.nanoTime();
       out.write(byteBuffer);  // Send the encoded string to the server
 
       // Receive the inverted string back from the server
@@ -34,10 +34,10 @@ public class TCPEchoClient {
           throw new SocketException("Connection close prematurely");
         totalBytesRcvd += bytesRcvd;
       }
-      long recTime = System.currentTimeMillis();
+      long recTime = System.nanoTime();
       
       System.out.println("Result: " + new String(byteBuffer));
-      System.out.println("Time elapsed: " + (recTime - sendTime) + "ms");
+      System.out.println("Time elapsed: " + (recTime - sendTime) + "ns");
     }
   }
 }
