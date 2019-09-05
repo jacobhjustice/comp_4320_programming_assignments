@@ -28,14 +28,20 @@ public class TCPEchoServer {
       InputStream in = clntSock.getInputStream();
       OutputStream out = clntSock.getOutputStream();
 
+      // byteBuffer = new byte[BUFSIZE];
+      // System.out.print("before receiving: ");
+      // System.out.println(new String(byteBuffer));
+
       // Receive until client closes connection, indicated by -1 return
       while ((recvMsgSize = in.read(byteBuffer)) != -1) {
-
+        // System.out.println("received: " + new String(byteBuffer));
         String test = new String(byteBuffer);
         StringBuilder sb = new StringBuilder(test.trim());
-        // System.out.println(sb.reverse().toString());
+        String reversed = sb.reverse().toString();
+        // System.out.println(reversed);
 
-        out.write(sb.reverse().toString().getBytes(), 0, recvMsgSize);
+        out.write(reversed.getBytes(), 0, recvMsgSize);
+        byteBuffer = new byte[BUFSIZE];
       }
 
       clntSock.close();  // Close the socket.  We are done with this client!
