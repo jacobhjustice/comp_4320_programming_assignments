@@ -19,9 +19,10 @@ public class TCPEchoClient {
     OutputStream out = socket.getOutputStream();
 
     while(true) {
-      System.out.println("Enter a sentence to reverse: ");
+      System.out.println("\nEnter a sentence to reverse: ");
       String sentence = input.nextLine();
       byte[] byteBuffer = sentence.getBytes();
+      long sendTime = System.currentTimeMillis();
       out.write(byteBuffer);  // Send the encoded string to the server
 
       // Receive the inverted string back from the server
@@ -33,8 +34,10 @@ public class TCPEchoClient {
           throw new SocketException("Connection close prematurely");
         totalBytesRcvd += bytesRcvd;
       }
+      long recTime = System.currentTimeMillis();
 
       System.out.println("Result: " + new String(byteBuffer));
+      System.out.println("Time elapsed: " + (recTime - sendTime) + "ms");
     }
   }
 }
