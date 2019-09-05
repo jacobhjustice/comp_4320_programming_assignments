@@ -35,7 +35,7 @@ public class TCPEchoClient {
         totalBytesRcvd += bytesRcvd;
       }
       long recTime = System.currentTimeMillis();
-
+      
       System.out.println("Result: " + new String(byteBuffer));
       System.out.println("Time elapsed: " + (recTime - sendTime) + "ms");
     }
