@@ -25,7 +25,7 @@ public class UDPEchoClientTimeout {
          DatagramSocket socket = new DatagramSocket();
       
          socket.setSoTimeout(TIMEOUT);  // Maximum receive blocking time (milliseconds)
-         long sendTime = System.currentTimeMillis();
+         long sendTime = System.nanoTime();
          DatagramPacket sendPacket = new DatagramPacket(bytesToSend,  // Sending packet
             bytesToSend.length, serverAddress, servPort);
       
@@ -48,13 +48,13 @@ public class UDPEchoClientTimeout {
                System.out.println("Timed out, " + (MAXTRIES-tries) + " more tries...");
             }
          } while ((!receivedResponse) && (tries < MAXTRIES));
-         long recTime = System.currentTimeMillis();
+         long recTime = System.nanoTime();
       
          if (receivedResponse)
             System.out.println("Received: " + new String(receivePacket.getData()));
          else
             System.out.println("No response -- giving up.");
-         System.out.println("Time elapsed: " + (recTime - sendTime) + "ms");
+         System.out.println("Time elapsed: " + (recTime - sendTime) + " ns");
          
          socket.close();         
       }
