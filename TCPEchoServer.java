@@ -29,8 +29,19 @@ public class TCPEchoServer {
       OutputStream out = clntSock.getOutputStream();
 
       // Receive until client closes connection, indicated by -1 return
-      while ((recvMsgSize = in.read(byteBuffer)) != -1)
-        out.write(byteBuffer, 0, recvMsgSize);
+      while ((recvMsgSize = in.read(byteBuffer)) != -1) {
+        StringBuilder sb = new StringBuilder(new String(byteBuffer));
+        String reversed = "";
+
+        // Start from the back of the recieved data, and traverse down to the beginning
+        // in order to build the string backwards.
+        for(int i = recvMsgSize - 1; i >= 0; i--) {
+          reversed = reversed + sb.charAt(i);
+        }
+        
+        out.write(reversed.getBytes(), 0, recvMsgSize);
+        byteBuffer = new byte[BUFSIZE];
+      }
 
       clntSock.close();  // Close the socket.  We are done with this client!
     }
