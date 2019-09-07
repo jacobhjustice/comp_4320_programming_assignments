@@ -2,7 +2,7 @@ import java.net.*;  // for Socket
 import java.io.*;   // for IOException and Input/OutputStream
 import java.util.Scanner;
 
-public class TCPEchoClient {
+public class myFirstTCPClient {
 
   public static void main(String[] args) throws IOException {
 
