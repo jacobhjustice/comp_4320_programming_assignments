@@ -17,7 +17,7 @@ public class myFirstUDPClient {
       Scanner input = new Scanner(System.in);
    
       for(;;) {
-         System.out.println("Enter a sentence to reverse: ");
+         System.out.println("\nEnter a sentence to reverse: ");
          String sentence = input.nextLine();
          if (sentence.length() > 128) {
             System.out.println("Error, string too long!");
