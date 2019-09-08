@@ -3,7 +3,7 @@ import java.io.*;   // for IOException and Input/OutputStream
 
 public class myFirstTCPServer {
 
-  private static final int BUFSIZE = 32;   // Size of receive buffer
+  private static final int BUFSIZE = 128;   // Size of receive buffer
 
   public static void main(String[] args) throws IOException {
 

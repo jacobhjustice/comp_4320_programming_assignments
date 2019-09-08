@@ -21,6 +21,10 @@ public class myFirstTCPClient {
     while(true) {
       System.out.println("\nEnter a sentence to reverse: ");
       String sentence = input.nextLine();
+      if (sentence.length() > 128) {
+        System.out.println("Error, string too long!");
+        continue;
+      }
       byte[] byteBuffer = sentence.getBytes();
       long sendTime = System.nanoTime();
       out.write(byteBuffer);  // Send the encoded string to the server
