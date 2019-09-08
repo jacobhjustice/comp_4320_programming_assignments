@@ -21,6 +21,10 @@ public class myFirstUDPClient {
       for(;;) {
          System.out.println("Enter a sentence to reverse: ");
          String sentence = input.nextLine();
+         if (sentence.length() > 128) {
+            System.out.println("Error, string too long!");
+            continue;
+         }
          byte[] bytesToSend = sentence.getBytes();
          DatagramSocket socket = new DatagramSocket();
       
