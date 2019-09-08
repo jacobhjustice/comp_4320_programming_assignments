@@ -8,14 +8,12 @@ public class myFirstUDPClient {
 
    public static void main(String[] args) throws IOException {
    
-      if ((args.length < 1) || (args.length > 2))  // Test for correct # of args
-         throw new IllegalArgumentException("Parameter(s): <Server> [<Port>]");
+      if (args.length != 2)  // Test for correct # of args
+         throw new IllegalArgumentException("Parameter(s): <Server> <Port>");
    
       InetAddress serverAddress = InetAddress.getByName(args[0]);  // Server address
-    // Convert input String to bytes using the default character encoding
-      //byte[] bytesToSend = args[1].getBytes();
    
-      int servPort = (args.length == 2) ? Integer.parseInt(args[1]) : 7;
+      int servPort = Integer.parseInt(args[1]);
       Scanner input = new Scanner(System.in);
    
       for(;;) {
