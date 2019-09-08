@@ -40,7 +40,7 @@ public class myFirstTCPServer {
         }
         
         out.write(reversed.getBytes(), 0, recvMsgSize);
-        byteBuffer = new byte[BUFSIZE];
+        byteBuffer = new byte[BUFSIZE]; // clear out byte buffer before next loop itr
       }
 
       clntSock.close();  // Close the socket.  We are done with this client!
