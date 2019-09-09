@@ -17,7 +17,7 @@ public class myFirstUDPServer {
     
     for (;;) {  // Run forever, receiving and echoing datagrams
       socket.receive(packet);     // Receive packet from client
-      System.out.println(packet.getData());
+      // System.out.println(packet.getData());
       byte[] myPacket = packet.getData();
       int packLength  = packet.getLength();
       int j = 0;
@@ -30,6 +30,9 @@ public class myFirstUDPServer {
       packet.setData(result);
       System.out.println("Handling client at " +
         packet.getAddress().getHostAddress() + " on port " + packet.getPort());
+
+      System.out.println("Received: " + new String(myPacket));
+      System.out.println("Reversed: " + new String(result));
       socket.send(packet);       // Send the same packet back to client
       packet.setLength(ECHOMAX); // Reset length to avoid shrinking buffer
     }
