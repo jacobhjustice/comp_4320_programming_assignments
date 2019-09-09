@@ -30,7 +30,8 @@ public class myFirstTCPServer {
 
       // Receive until client closes connection, indicated by -1 return
       while ((recvMsgSize = in.read(byteBuffer)) != -1) {
-        StringBuilder sb = new StringBuilder(new String(byteBuffer));
+        String original = new String(byteBuffer);
+        StringBuilder sb = new StringBuilder(original);
         String reversed = "";
 
         // Start from the back of the recieved data, and traverse down to the beginning
@@ -38,7 +39,8 @@ public class myFirstTCPServer {
         for(int i = recvMsgSize - 1; i >= 0; i--) {
           reversed = reversed + sb.charAt(i);
         }
-        
+        System.out.println("Received: " + original);
+        System.out.println("Reversed: " + reversed);
         out.write(reversed.getBytes(), 0, recvMsgSize);
         byteBuffer = new byte[BUFSIZE]; // clear out byte buffer before next loop itr
       }
