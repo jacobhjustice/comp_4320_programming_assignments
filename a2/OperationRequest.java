@@ -1,4 +1,4 @@
-public class Operation {
+public class OperationRequest {
 
   public byte tml;
   public byte request_id;
@@ -7,7 +7,7 @@ public class Operation {
   public short operand1;
   public short operand2;
 
-  public Operation(byte tml, byte request_id, byte op_code, byte, num_operands, short operand1, short operand2)  {
+  public OperationRequest(byte tml, byte request_id, byte op_code, byte num_operands, short operand1, short operand2)  {
     this.tml = tml;
     this.request_id = request_id;
     this.op_code = op_code;
