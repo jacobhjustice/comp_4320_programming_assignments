@@ -20,6 +20,5 @@ public class OperationResult {
                    "result     = " + result + EOLN;
     return value;
   }
-
   
 }
