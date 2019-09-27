@@ -6,7 +6,7 @@ public class OperationResultEncoderBin implements OperationResultEncoder {
     // nothing to initialize
   }
 
-  public byte[] encode(OperationResult operation) throws Exception {
+  public byte[] encode(OperationResult operation) throws IOException {
 
     ByteArrayOutputStream buf = new ByteArrayOutputStream();
     DataOutputStream out = new DataOutputStream(buf);

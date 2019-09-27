@@ -6,7 +6,7 @@ public class OperationRequestDecoderBin implements OperationRequestDecoder {
     public OperationRequestDecoderBin() {
     }
 
-    public OperationRequest decode(InputStream wire) throws IOException {
+    public OperationRequest decode(InputStream wire)  throws IOException  {
 
         DataInputStream src = new DataInputStream(wire);
         byte tml = src.readByte();

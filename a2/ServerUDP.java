@@ -14,85 +14,74 @@ public class ServerUDP {
 
     DatagramSocket socket = new DatagramSocket(servPort);
     DatagramPacket packet = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
-    
+    OperationRequestDecoder decoder = new OperationRequestDecoderBin();
+    OperationResultEncoder encoder = new OperationResultEncoderBin();
+
     for (;;) {  // Run forever, receiving and echoing datagrams
       socket.receive(packet);     // Receive packet from client
-      // System.out.println(packet.getData());
-      byte[] myPacket = packet.getData();
+
       int packLength  = packet.getLength();
-      
-
-      // byte[] result = new byte [ECHOMAX];
-      // for (int i=packLength-1; i >= 0; i--)  
-      // { 
-      // 	 result[i] = myPacket[i];
-      // }
-
-
-      // packet.setData(result);
-      // System.out.println("Handling client at " +
-      //   packet.getAddress().getHostAddress() + " on port " + packet.getPort());
-
-      // System.out.println("Received: " + new String(myPacket));
-
       // DECODE OPERATION OBJECT FROM BINARY
 
-      int TML = 0;
+      OperationRequest request = decoder.decode(packet);
+      byte error_code = 0;
 
       // Assert that byte length recieved is equal to object's TML value
-      if(TML = packLength) {
-        //127
+      if(request.tml != packLength) {
+        error_code = 127;
       }
 
       int num = 0;
-      int op1 = 0;
-      int op2 = 0;
-      long result;
-      boolean isError = false;
-      switch (num) {
+      short op1 = request.operand1;
+      short op2 = request.operand2;
+      int opResult = -1;
+      switch (request.op_code) {
         // Addition
         case 0:
-          result = op1 + op2;
+          opResult = op1 + op2;
           break;
         
         // Subtraction
         case 1:
-          result = op1 - op2;
+          opResult = op1 - op2;
           break;
       
         // Multiplication
         case 2:
-          result = op1 * op2;
+          opResult = op1 * op2;
           break;
 
         // Division
         case 3:
-          result = op1 / op2;
+          opResult = op1 / op2;
           break;
 
         // Shift Right  
         case 4: 
-          result = op1 >> op2;
+          opResult = op1 >> op2;
           break;
 
         // Shift Left  
         case 5: 
-          result = op1 << op2;
+          opResult = op1 << op2;
           break;
         
         // Not
         case 6:
-          result = ~op1;
+          opResult = ~op1;
           break;
 
         default:
-          isError = true;
+          error_code = 127;
           break;
       }
 
+      byte tml = 7;
       
+      OperationResult result = new OperationResult(tml, request.request_id, error_code, opResult);
 
-
+      byte[] bin = encoder.encode(result);
+      packet.setData(bin);
       socket.send(packet);       // Send the same packet back to client
       packet.setLength(ECHOMAX); // Reset length to avoid shrinking buffer
     }

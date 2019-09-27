@@ -1,7 +1,9 @@
 import java.net.*;  // for DatagramSocket, DatagramPacket, and InetAddress
 import java.io.*;   // for IOException
 import java.util.Scanner;
-public class myFirstUDPClient {
+import java.util.Random; 
+
+public class ClientUDP {
 
    private static final int TIMEOUT = 3000;   // Resend timeout (milliseconds)
    private static final int MAXTRIES = 5;     // Maximum retransmissions
@@ -14,16 +16,41 @@ public class myFirstUDPClient {
       InetAddress serverAddress = InetAddress.getByName(args[0]);  // Server address
    
       int servPort = Integer.parseInt(args[1]);
+      Random random = new Random(); 
+      int request_id = random.nextInt(128);
       Scanner input = new Scanner(System.in);
+
+      OperationResultDecoder decoder = new OperationResultDecoderBin();
+      OperationRequestEncoder encoder = new OperationRequestEncoderBin();
    
       for(;;) {
-         System.out.println("\nEnter operands: ");
-         String sentence = input.nextLine();
-         if (sentence.length() > 128) {
-            System.out.println("Error, input too long!");
+         System.out.println("\nEnter Op Code...\n1) Addition\n2) Subtraction\n3) Multiplication\n4) Division\n5) Shift Right\n6) Shift Left\n7) Complement\n\n\nOp Code: ");
+         int opCode = input.nextByte();
+
+         // TODO: TEST
+         if (opCode > 7 || opCode < 1) {
+            System.out.println("Enter a valid Op Code.\n");
             continue;
          }
-         byte[] bytesToSend = sentence.getBytes();
+
+         System.out.println("Enter Operand 1: ");
+         short op1 = input.nextShort();
+         // TODO: TEST
+
+         short op2 = 0;
+         byte num_operands = 0;
+         if(opCode != 7) {
+            System.out.println("Enter Operand 2: ");
+            op2 = input.nextShort();
+            num_operands = 1;
+         }
+
+         byte ttl = 8;
+         OperationRequest request = new OperationRequest(ttl, (byte)request_id, (byte)opCode, num_operands, op1, op2);
+
+         request_id = (request_id + 1) % 128;
+
+         byte[] bytesToSend = encoder.encode(request);
          DatagramSocket socket = new DatagramSocket();
       
          socket.setSoTimeout(TIMEOUT);  // Maximum receive blocking time (milliseconds)
@@ -53,7 +80,10 @@ public class myFirstUDPClient {
          long recTime = System.nanoTime();
       
          if (receivedResponse)
-            System.out.println("Received: " + new String(receivePacket.getData()));
+            response = decoder.decode(receivePacket.getData());
+            // ROUNT TRIP TIME
+            // ALL MESSAGE 1 BYTE AT A TIME
+            System.out.println("The result is: " + response.result)
          else
             System.out.println("No response -- giving up.");
          System.out.println("Time elapsed: " + (recTime - sendTime) + " ns");

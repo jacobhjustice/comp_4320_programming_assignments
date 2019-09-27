@@ -6,8 +6,7 @@ public class OperationRequestEncoderBin implements OperationRequestEncoder {
     // nothing to initialize
   }
 
-  public byte[] encode(OperationRequest operation) throws Exception {
-
+  public byte[] encode(OperationRequest operation) throws IOException {
     ByteArrayOutputStream buf = new ByteArrayOutputStream();
     DataOutputStream out = new DataOutputStream(buf);
     out.writeByte(operation.tml);
