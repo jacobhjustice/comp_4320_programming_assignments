@@ -13,11 +13,11 @@ public class ServerUDP {
     int servPort = Integer.parseInt(args[0]);
 
     DatagramSocket socket = new DatagramSocket(servPort);
-    DatagramPacket packet = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
     OperationRequestDecoder decoder = new OperationRequestDecoderBin();
     OperationResultEncoder encoder = new OperationResultEncoderBin();
 
     for (;;) {  // Run forever, receiving and echoing datagrams
+      DatagramPacket packet = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
       socket.receive(packet);     // Receive packet from client
 
       int packLength  = packet.getLength();
@@ -35,7 +35,7 @@ public class ServerUDP {
       short op1 = request.operand1;
       short op2 = request.operand2;
       int opResult = -1;
-      switch (request.op_code) {
+      switch ((int)request.op_code) {
         // Addition
         case 0:
           opResult = op1 + op2;
@@ -83,7 +83,6 @@ public class ServerUDP {
       byte[] bin = encoder.encode(result);
       packet.setData(bin);
       socket.send(packet);       // Send the same packet back to client
-      packet.setLength(ECHOMAX); // Reset length to avoid shrinking buffer
     }
     /* NOT REACHED */
   }

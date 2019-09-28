@@ -24,22 +24,20 @@ public class ClientUDP {
       OperationRequestEncoder encoder = new OperationRequestEncoderBin();
    
       for(;;) {
-         System.out.println("\nEnter Op Code...\n1) Addition\n2) Subtraction\n3) Multiplication\n4) Division\n5) Shift Right\n6) Shift Left\n7) Complement\n\n\nOp Code: ");
+         System.out.println("\nEnter Op Code...\n0) Addition\n1) Subtraction\n2) Multiplication\n3) Division\n4) Shift Right\n5) Shift Left\n6) Complement\n\n\nOp Code: ");
          int opCode = input.nextByte();
 
-         // TODO: TEST
-         if (opCode > 7 || opCode < 1) {
+         if (opCode > 6 || opCode < 0) {
             System.out.println("Enter a valid Op Code.\n");
             continue;
          }
 
          System.out.println("Enter Operand 1: ");
          short op1 = input.nextShort();
-         // TODO: TEST
 
          short op2 = 0;
          byte num_operands = 0;
-         if(opCode != 7) {
+         if(opCode != 6) {
             System.out.println("Enter Operand 2: ");
             op2 = input.nextShort();
             num_operands = 1;
@@ -79,13 +77,13 @@ public class ClientUDP {
          } while ((!receivedResponse) && (tries < MAXTRIES));
          long recTime = System.nanoTime();
       
-         if (receivedResponse)
-            response = decoder.decode(receivePacket.getData());
-            // ROUNT TRIP TIME
-            // ALL MESSAGE 1 BYTE AT A TIME
-            System.out.println("The result is: " + response.result)
-         else
+         if (receivedResponse) {
+            OperationResult response = decoder.decode(receivePacket);
+            System.out.println("The result is: " + response.result);
+         }
+         else {
             System.out.println("No response -- giving up.");
+         }
          System.out.println("Time elapsed: " + (recTime - sendTime) + " ns");
          
          socket.close();         
