@@ -36,11 +36,11 @@ public class ClientUDP {
          short op1 = input.nextShort();
 
          short op2 = 0;
-         byte num_operands = 0;
+         byte num_operands = 1;
          if(opCode != 6) {
             System.out.println("Enter Operand 2: ");
             op2 = input.nextShort();
-            num_operands = 1;
+            num_operands = 2;
          }
 
          byte ttl = 8;
@@ -79,6 +79,12 @@ public class ClientUDP {
       
          if (receivedResponse) {
             OperationResult response = decoder.decode(receivePacket);
+            
+            byte[] bytes = receivePacket.getData();
+            
+            System.out.println("Sent Packet    : " + new String(hexChars(bytesToSend, ttl)));
+            System.out.println("Received Packet: " + new String(hexChars(bytes, response.tml)));
+            System.out.println("Request ID is: " + response.request_id);
             System.out.println("The result is: " + response.result);
          }
          else {
@@ -91,5 +97,16 @@ public class ClientUDP {
    
     
       //socket.close();
+   }
+
+   private static char[] hexChars(byte[] bytes, int length_in) {
+      char [] hexChars = new char[length_in * 2];
+      char[] HEX_CHARS = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+      for (int j = 0; j < length_in; j++) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = HEX_CHARS[v >>> 4];
+            hexChars[j * 2 + 1] = HEX_CHARS[v & 0x0F];
+      }
+      return hexChars;
    }
 }
